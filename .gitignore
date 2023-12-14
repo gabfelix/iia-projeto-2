@@ -1,0 +1,21 @@
+# Core LaTeX/pdflatex auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+
+# Additional LaTeX libraries (if used)
+# Add similar patterns for other libraries as needed
+*.synctex.gz
+*.fdb_latexmk
+
+# Exclude auto-generated folders (if applicable)
+**/auto/**

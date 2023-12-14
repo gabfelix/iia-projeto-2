@@ -1,0 +1,112 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Projeto 2}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Gabriel Felix de Lima - 211010332}
+\IEEEauthorblockA{\textit{Departamento de Ciências da Computação} \\
+\textit{Universidade de Brasília}\\
+Brasília, Brasil \\
+gabfelixlima@outlook.com}
+}
+
+\maketitle
+
+\begin{abstract}
+This document is a model and instructions for \LaTeX.
+This and the IEEEtran.cls file define the components of your paper [title, text, heads, etc.]. *CRITICAL: Do Not Use Symbols, Special Characters, Footnotes, 
+or Math in Paper Title or Abstract.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introducao}
+O presente trabalho tem como objetivo a implementação de um sistema de reconhecimento de placas veiculares utilizando a biblioteca OpenCV e a linguagem de programação Python descrito por Laroca et al. \cite{b1}.
+O sistema deve ser capaz de identificar a placa de um veículo em uma imagem e extrair o texto contido nela com boa precisão tanto em imagens quanto em execução de vídeo em tempo real.
+
+\section{Metodologia}
+\label{sec:metodologia}
+O trabalho foi desenvolvido no Google Colab, um ambiente de desenvolvimento integrado (IDE) baseado em nuvem para Python que é executado no navegador, utilizando o sistema operacional Windows 11 e o navegador Microsoft Edge.
+O ambiente executado no Colab possui uma GPU NVIDIA Tesla T4 com 16GB de memória RAM e 12GB de memória de vídeo.
+
+As bibliotecas utilizadas foram OpenCV, Numpy e a API de Python da Darknet.
+Darknet é uma \textit{framework} de redes neurais escrita em C/C++ e CUDA, que é capaz de identificar objetos em imagens e vídeos em tempo real.
+O notebook desenvolvido baixa e compila a Darknet com suporte a CUDA e acesso à API habilitado.
+Especificamente, ele utiliza a mesma versão dela que os autores originais: a Darknet de AlexeyAB \cite{b3} que possui algumas melhorias em relação à versão original.
+Foram utilizados a arquitetura e os pesos disponibilizados publicamente pelos autores\cite{b2} para construir três redes pré-treinadas, cada uma responsável por uma fase do processo.
+
+São as três fases: detecção de veículo, detecção de placa e leitura de placa.
+Cada rede tem um tamanho específico de imagem com a qual ela trabalha.
+Antes de executar a detecção, a imagem é redimensionada ao tamanho correto.
+Após isso, o Darknet executa a detecção e são retornados os nomes do objeto detectado junto com sua posição na imagem \emph{redimensionada}.
+A figura \ref{fig:diagrama_redimensao} ilustra o processo de redimensionamento da imagem.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{diagrama_redimensao.png}
+    \caption{Diagrama ilustrando o redimensionamento da imagem ao enviar dados à rede.}
+    \label{fig:diagrama_redimensao}
+\end{figure}
+
+Após isso, o sistema detecta o carro na imagem e entrega a região onde o carro foi encontrado. As coordenadas são então redimensionadas para o tamanho original da imagem e a região é recortada e tem um retângulo desenhado.
+As coordenadas novas são usadas para desenhar um retângulo em volta do veículo encontrado, como retratado na figura \ref{fig:veiculo_detectado}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{veiculo_detectado.png}
+    \caption{Imagem ilustrando o retângulo desenhado na imagem após a detecção. Simulado com o Paint.}
+    \label{fig:veiculo_detectado}
+\end{figure}
+
+O processo de detecção e recorte é então repetido para a placa dentro da imagem recortada que contém apenas o veículo.
+A imagem resultante está ilustrada na figura \ref{fig:placa_detectada}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{placa_detectada.png}
+    \caption{Imagem ilustrando o retângulo desenhado na imagem após a detecção da placa dentro do recorte do veículo. Simulado com o Paint.}
+    \label{fig:placa_detectada}
+\end{figure}
+
+O último estágio consiste na repetição do processo de corte e detecção para gerar uma imagem que contenha somente a placa (figura \ref{fig:placa_recorte}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{placa.png}
+    \caption{Imagem ilustrando o último recorte que contém somente a placa. O conteúdo foi censurado para preservar a privacidade do motorista. Simulado com o Paint.}
+    \label{fig:placa_recorte}
+\end{figure}
+
+Resumidamente, o sistema inteiro pode ser descrito pelo diagrama da figura \ref{fig:diagrama_sistema}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{diagrama_crop.png}
+    \caption{Diagrama ilustrando todos os estágios de detecção. Imagens simuladas com o Paint.}
+    \label{fig:diagrama_sistema}
+\end{figure}
+
+O sistema foi então testado em imagens e vídeos de testes gravados pelo autor do trabalho. A seção de resultados apresenta os resultados obtidos e sua análise.
+
+\section{Resultados}
+\label{sec:resultados}
+
+\section{Conclusão}
+\label{sec:conclusao}
+
+\begin{thebibliography}{00}
+\bibitem{b1} Laroca R, Zanlorensi LA,Gonçalves GR, Todt E, Schwartz WR, Menotti D. Anefficient and layout-independent automatic license platerecognition system based on the YOLO detector.IETIntell Transp Syst. 2021;15:483–503. https://doi.org/10.1049/itr2.12030
+\bibitem{b2} Publicação do artigo de Laroca et al: https://web.inf.ufpr.br/vri/publications/layout-independent-alpr/, acesso em 12/2023
+\bibitem{b3} Página do GitHub do fork da Darknet de AlexeyAB: https://github.com/AlexeyAB/darknet, acesso em 12/2023
+\end{thebibliography}
+
+\end{document}
