@@ -23,15 +23,14 @@ gabfelixlima@outlook.com}
 \maketitle
 
 \begin{abstract}
-This document is a model and instructions for \LaTeX.
-This and the IEEEtran.cls file define the components of your paper [title, text, heads, etc.]. *CRITICAL: Do Not Use Symbols, Special Characters, Footnotes, 
-or Math in Paper Title or Abstract.
+O trabalho documenta a implementação de um sistema de reconhecimento de placas veiculares descrito por Laroca et al. \cite{b1} utilizando a biblioteca OpenCV e a linguagem de programação Python para processamento de imagens a cada um dos três estágios.
+O sistema mostrou-se inefetivo em ler placas em qualquer situação e apresentou dificuldades em detectar veículos em posições distantes da câmera. No entanto, apresentou resultados funcionais em detectar veículos e placas que estivessem próximos e no nível da câmera.
 \end{abstract}
 
-\section{Introduction}
+\section{Introdução}
 \label{sec:introducao}
-O presente trabalho tem como objetivo a implementação de um sistema de reconhecimento de placas veiculares utilizando a biblioteca OpenCV e a linguagem de programação Python descrito por Laroca et al. \cite{b1}.
-O sistema deve ser capaz de identificar a placa de um veículo em uma imagem e extrair o texto contido nela com boa precisão tanto em imagens quanto em execução de vídeo em tempo real.
+O presente trabalho tem como objetivo a implementação de um sistema de reconhecimento de placas veiculares descrito por Laroca et al. \cite{b1} utilizando a biblioteca OpenCV e a linguagem de programação Python.
+O sistema deve ser capaz de identificar a placa de um veículo em uma imagem e extrair o texto contido nela com boa precisão tanto em imagens quanto em vídeo. Idealmente, a detecção deve ser rápida o suficiente para ser feita em tempo real.
 
 \section{Metodologia}
 \label{sec:metodologia}
@@ -99,9 +98,58 @@ O sistema foi então testado em imagens e vídeos de testes gravados pelo autor 
 
 \section{Resultados}
 \label{sec:resultados}
+O programa foi testado em 80 imagens e 5 vídeos obtidos pelo autor. Um dos vídeos tem duração de 2 minutos e o resto menos de 10 segundos.
+O vídeo longo é uma gravação de uma posição privilegiada da entrada do túnel de acesso Engenheiro Dalmo Rebello enquanto os mais curtos são de uma rotatória próxima.
+As fotos foram tiradas entre as gravações do vídeo ou foram diretamente extraídas dos vídeos mais curtos.
+Tanto as fotos quanto os vídeos foram obtidos dia 08/12/2023 aproximadamente às 08:10.
+
+\subsection{Vídeos}
+O vídeo de 2 minutos foi gravado em direção ao viaduto de uma posição privilegiada, enquanto os outros vídeos mais curtos mostram os carros na rotatória.
+Este vídeo foi escolhido para análise por ser maior e conter mais carros. Os vídeos menores tiveram seus frames extraídos e foram adicionados às imagens.
+
+A performance obtida nos experimentos não foi adequada para execução em tempo real, com um FPS instável, porém inferior a 31 durante todo o processamento.
+
+A precisão também deixou a desejar. O sistema apresentou dificuldades em detectar múltiplos veículos ou aqueles que estivessem a uma certa distância da câmera.
+Carros fora da seção média ou inferior da imagem raramente eram detectados.
+A figura \ref{fig:carro_longe} ilustra o problema mencionado, além de demonstrar um erro na etapa de detecção de placas, problema este que se mostrou frequente em testes (figura \ref{fig:alucinacao_placa}).
+O reconhecimento de placas se mostrou inefetivo, com a absoluta maioria das placas sendo reconhecidas incorretamente ou não sendo reconhecidas, tanto em vídeos quanto em imagens.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{captura_video.png}
+    \caption{Imagem retirada do vídeo processado mostrando a detecção de um único veículo.}
+    \label{fig:carro_longe}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{alucinacao_placa.png}
+    \caption{Recorte retirado do vídeo processado mostrando a detecção correta de um veículo junto com o erro na detecção de uma placa.}
+    \label{fig:alucinacao_placa}
+\end{figure}
+
+O sistema também alucinou a detecção de um veículo enorme, quase do tamanho da imagem. Este problema não foi observado nos vídeos curtos, somente no vídeo do viaduto.
+
+Resultados de detecção melhores foram obtidos ao utilizar os vídeos menores, que foram gravados em uma situação que os carros estavam ao nível da câmera e próximos a ela.
+A imagem \ref{fig:carro_perto} apresenta um dos resultados obtidos.
+Apesar disso, como mencionado anteriormente, o reconhecimento dos caracteres na placa ainda está incorreto.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{captura_video1.png}
+    \caption{Imagem recortada de um dos vídeos mais curtos processados mostrando a detecção de um veículo na rotatória. O texto lido na placa é: ``IUIIF"}
+    \label{fig:carro_perto}
+\end{figure}
+
+
+\subsection{Imagens}
+O código responsável pelo processamento das imagens para as três etapas foi diretamente usado na execução do processamento dos vídeos, o que significa que tanto as imagens quanto os vídeos têm resultados e problemas semelhantes, já que processar um vídeo é equivalente a processar cada frame como uma imagem separada.
+
 
 \section{Conclusão}
 \label{sec:conclusao}
+O sistema não mostrou-se adequado para uso em tempo real devido a instabilidade em tempos de processamento e velocidades lentas dado o ambiente descrito na seção \ref{sec:metodologia}.
+A precisão do reconhecimento de placas mostrou-se insuficiente para as condições de teste estabelecidas no trabalho. No entanto, o sistema obteve resultados melhores em tarefas de detecção de objetos, especificamente veículos e placas, com precisão aceitável em certas condições, onde o veículo está próximo e ao nível da câmera.
 
 \begin{thebibliography}{00}
 \bibitem{b1} Laroca R, Zanlorensi LA,Gonçalves GR, Todt E, Schwartz WR, Menotti D. Anefficient and layout-independent automatic license platerecognition system based on the YOLO detector.IETIntell Transp Syst. 2021;15:483–503. https://doi.org/10.1049/itr2.12030
